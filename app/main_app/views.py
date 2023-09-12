@@ -3,10 +3,17 @@ from django import forms
 
 
 class NameForm(forms.Form):
-    your_name = forms.CharField(label="Your name", max_length=100)
-    you_age = forms.CharField(label="Your age", max_length=100)
-    you_cash = forms.CharField(label="Your cash", max_length=100)
+    field_ = forms.CharField(label="field", max_length=100, required=False,
+                             widget=forms.TextInput(attrs={'class': 'field'}))
+    operator_ = forms.CharField(label="operator", max_length=100, required=False,
+                                widget=forms.TextInput(attrs={'class': 'operator'}))
+    value_ = forms.CharField(label="value", max_length=100, required=False,
+                             widget=forms.TextInput(attrs={'class': 'value'}))
 
 
 def first_view(request):
+    if request.method == 'POST':
+        print('si')
+        print(request.POST)
+
     return render(request, "first_template.html", {'form': NameForm})

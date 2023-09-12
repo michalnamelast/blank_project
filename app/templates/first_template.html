@@ -6,32 +6,51 @@
 </head>
 <body>
 
-<style>
-    .hidden {
-        display: none
-    }
-</style>
 
-    <p>FORMA:</p>
+<p>FORMA:</p>
+<form method="POST" action="/">
+    {% csrf_token %}
     <div id="form-list"></div>
-
-    <div id="empty-form" class="">{{form}}</div>
     <button id="add-more" style="margin-top:10px" type="button">Add More</button>
     <button style="margin-top:10px" type="submit">Save</button>
+</form>
 
+<div id="empty-form" style="display:none;">
+    <div class="filter-form">
+        {% for field in form %}
+        {{ field }}
+        {% endfor %}
+    </div>
+</div>
 
 <script>
-    const addMoreBtn = document.getElementById('add-more')
-    addMoreBtn.addEventListener('click', add_new_form)
+    let lengthOfElements = 0;
+    const addMoreBtn = document.getElementById('add-more');
+    const formCopyTarget = document.getElementById('form-list');
+    const emptyForm = document.querySelector('#empty-form .filter-form');
 
-    function add_new_form(event){
-        if (event){
-            event.preventDefault()
-        }
-        const formCopyTarget = document.getElementById('form-list')
-        const emptyForm = document.getElementById('empty-form').cloneNode(true)
-        emptyForm.setAttribute('class', 'filter-form')
-        formCopyTarget.append(emptyForm)
+    addMoreBtn.addEventListener('click', add_new_form);
+
+    function add_new_form(event) {
+        const clone = emptyForm.cloneNode(true);
+
+        const inputs = clone.querySelectorAll('input');
+        inputs.forEach(input => {
+            const currentId = input.getAttribute('id');
+            if (currentId) {
+                input.setAttribute('id', currentId + '_' + lengthOfElements);
+            }
+        });
+        const fieldNames = ['field_', 'operator_', 'value_'];
+        fieldNames.forEach(fieldName => {
+            const elements = clone.querySelectorAll(`[name="${fieldName}"]`);
+            elements.forEach(element => {
+                element.setAttribute('name', `${fieldName}${lengthOfElements}`);
+            });
+        });
+
+        formCopyTarget.appendChild(clone);
+        lengthOfElements++;
     }
 </script>
 
