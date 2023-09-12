@@ -5,10 +5,35 @@
     <title>welcome</title>
 </head>
 <body>
-    FORMA
+
+<style>
+    .hidden {
+        display: none
+    }
+</style>
+
+    <p>FORMA:</p>
+    <div id="form-list"></div>
+
+    <div id="empty-form" class="">{{form}}</div>
+    <button id="add-more" style="margin-top:10px" type="button">Add More</button>
+    <button style="margin-top:10px" type="submit">Save</button>
 
 
+<script>
+    const addMoreBtn = document.getElementById('add-more')
+    addMoreBtn.addEventListener('click', add_new_form)
 
+    function add_new_form(event){
+        if (event){
+            event.preventDefault()
+        }
+        const formCopyTarget = document.getElementById('form-list')
+        const emptyForm = document.getElementById('empty-form').cloneNode(true)
+        emptyForm.setAttribute('class', 'filter-form')
+        formCopyTarget.append(emptyForm)
+    }
+</script>
 
 </body>
 </html>
